@@ -14,32 +14,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
-using System.Windows.Threading;
 
 namespace TIA_Portal_V14_SP1_Starter
 {
     /// <summary>
     /// Interaktionslogik für MainWindow.xaml
     /// </summary>
-    /// 
-    public static class ExtensionMethods
-    {
-        private static Action EmptyDelegate = delegate () { };
-
-        public static void Refresh(this UIElement uiElement)
-        {
-            try
-            {
-                uiElement.Dispatcher.Invoke(DispatcherPriority.Render, EmptyDelegate);
-            }
-            catch (Exception exp)
-            {
-
-            }
-
-        }
-    }
-
     public partial class MainWindow : Window
     {
 
@@ -125,7 +105,15 @@ namespace TIA_Portal_V14_SP1_Starter
 
             System.IO.DirectoryInfo ParentDirectory = new System.IO.DirectoryInfo("Projekte");
 
-            EigenschaftenAendern(ProjektStarten_BUG_NONE_NONE, ProjektStarten_PLC_NONE_FIO, ProjektStarten_PLC_NONE_NONE, ProjektStarten_PLC_HMI_NONE, "Enable", "-");
+            ProjektStarten_PLC_NONE_NONE.IsEnabled = true;
+            ProjektStarten_PLC_HMI_NONE.IsEnabled = true;
+            ProjektStarten_PLC_NONE_FIO.IsEnabled = true;
+            ProjektStarten_BUG_NONE_NONE.IsEnabled = true;
+
+            ProjektStarten_PLC_NONE_NONE.Background = new SolidColorBrush(Colors.Green);
+            ProjektStarten_PLC_HMI_NONE.Background = new SolidColorBrush(Colors.Green);
+            ProjektStarten_PLC_NONE_FIO.Background = new SolidColorBrush(Colors.Green);
+            ProjektStarten_BUG_NONE_NONE.Background = new SolidColorBrush(Colors.Green);
 
             ProjektName = rb.Name;
 
@@ -133,17 +121,25 @@ namespace TIA_Portal_V14_SP1_Starter
             string HtmlSeite = System.IO.File.ReadAllText(DateiName);
             string LeereHtmlSeite = "<!doctype html>   </html >";
 
-            if (rb.Name.Contains("PLC_NONE_NONE")) Web_PLC_NONE_NONE.NavigateToString(HtmlSeite);
-            else Web_PLC_NONE_NONE.NavigateToString(LeereHtmlSeite);
+            if (rb.Name.Contains("PLC_NONE_NONE"))
+                Web_PLC_NONE_NONE.NavigateToString(HtmlSeite);
+            else
+                Web_PLC_NONE_NONE.NavigateToString(LeereHtmlSeite);
 
-            if (rb.Name.Contains("PLC_HMI_NONE")) Web_PLC_HMI_NONE.NavigateToString(HtmlSeite);
-            else Web_PLC_HMI_NONE.NavigateToString(LeereHtmlSeite);
+            if (rb.Name.Contains("PLC_HMI_NONE"))
+                Web_PLC_HMI_NONE.NavigateToString(HtmlSeite);
+            else
+                Web_PLC_HMI_NONE.NavigateToString(LeereHtmlSeite);
 
-            if (rb.Name.Contains("PLC_NONE_FIO")) Web_PLC_NONE_FIO.NavigateToString(HtmlSeite);
-            else Web_PLC_NONE_FIO.NavigateToString(LeereHtmlSeite);
+            if (rb.Name.Contains("PLC_NONE_FIO"))
+                Web_PLC_NONE_FIO.NavigateToString(HtmlSeite);
+            else
+                Web_PLC_NONE_FIO.NavigateToString(LeereHtmlSeite);
 
-            if (rb.Name.Contains("BUG_NONE_NONE")) Web_BUG_NONE_NONE.NavigateToString(HtmlSeite);
-            else Web_BUG_NONE_NONE.NavigateToString(LeereHtmlSeite);
+            if (rb.Name.Contains("BUG_NONE_NONE"))
+                Web_BUG_NONE_NONE.NavigateToString(HtmlSeite);
+            else
+                Web_BUG_NONE_NONE.NavigateToString(LeereHtmlSeite);
 
 
         }
@@ -153,18 +149,13 @@ namespace TIA_Portal_V14_SP1_Starter
             System.IO.DirectoryInfo ParentDirectory = new System.IO.DirectoryInfo("Projekte");
             string sourceDirectory = ParentDirectory.FullName + "\\" + ProjektName;
 
-            EigenschaftenAendern(ProjektStarten_BUG_NONE_NONE, ProjektStarten_PLC_NONE_FIO, ProjektStarten_PLC_NONE_NONE, ProjektStarten_PLC_HMI_NONE, "Start", "Ordner " + ProjektPfad + " löschen");
             if (System.IO.Directory.Exists(ProjektPfad)) System.IO.Directory.Delete(ProjektPfad, true);
-
-            EigenschaftenAendern(ProjektStarten_BUG_NONE_NONE, ProjektStarten_PLC_NONE_FIO, ProjektStarten_PLC_NONE_NONE, ProjektStarten_PLC_HMI_NONE, "Start", "Ordner " + ProjektPfad + " erstellen");
             System.IO.Directory.CreateDirectory(ProjektPfad);
 
-            EigenschaftenAendern(ProjektStarten_BUG_NONE_NONE, ProjektStarten_PLC_NONE_FIO, ProjektStarten_PLC_NONE_NONE, ProjektStarten_PLC_HMI_NONE, "Start", "Alle Dateien kopieren");
             Copy(sourceDirectory, ProjektPfad);
 
-            EigenschaftenAendern(ProjektStarten_BUG_NONE_NONE, ProjektStarten_PLC_NONE_FIO, ProjektStarten_PLC_NONE_NONE, ProjektStarten_PLC_HMI_NONE, "Start", "Projekt starten");
             Process proc = new Process();
-            proc.StartInfo.FileName = ProjektPfad + "\\start.cmd";
+            proc.StartInfo.FileName = ProjektPfad + " \\start.cmd";
             proc.StartInfo.WorkingDirectory = ProjektPfad;
             proc.Start();
         }
@@ -200,8 +191,15 @@ namespace TIA_Portal_V14_SP1_Starter
 
         private void TabControl_SelectionChanged(object sender, RoutedEventArgs e)
         {
+            ProjektStarten_PLC_NONE_NONE.Background = new SolidColorBrush(Colors.Gray);
+            ProjektStarten_PLC_HMI_NONE.Background = new SolidColorBrush(Colors.Gray);
+            ProjektStarten_PLC_NONE_FIO.Background = new SolidColorBrush(Colors.Gray);
+            ProjektStarten_BUG_NONE_NONE.Background = new SolidColorBrush(Colors.Gray);
 
-            EigenschaftenAendern(ProjektStarten_BUG_NONE_NONE, ProjektStarten_PLC_NONE_FIO, ProjektStarten_PLC_NONE_NONE, ProjektStarten_PLC_HMI_NONE, "Disable", "-");
+            ProjektStarten_PLC_NONE_NONE.IsEnabled = false;
+            ProjektStarten_PLC_HMI_NONE.IsEnabled = false;
+            ProjektStarten_PLC_NONE_FIO.IsEnabled = false;
+            ProjektStarten_BUG_NONE_NONE.IsEnabled = false;
 
             string LeereHtmlSeite = "<!doctype html>   </html >";
             Web_PLC_NONE_NONE.NavigateToString(LeereHtmlSeite);
@@ -209,71 +207,5 @@ namespace TIA_Portal_V14_SP1_Starter
             Web_PLC_NONE_FIO.NavigateToString(LeereHtmlSeite);
             Web_BUG_NONE_NONE.NavigateToString(LeereHtmlSeite);
         }
-
-        private void EigenschaftenAendern(Button Knopf1, Button Knopf2, Button Knopf3, Button Knopf4, String ToDo, string Text)
-        {
-            switch (ToDo)
-            {
-                case "Enable":
-                    Knopf1.IsEnabled = true;
-                    Knopf2.IsEnabled = true;
-                    Knopf3.IsEnabled = true;
-                    Knopf4.IsEnabled = true;
-
-                    Knopf1.Background = new SolidColorBrush(Colors.Green);
-                    Knopf2.Background = new SolidColorBrush(Colors.Green);
-                    Knopf3.Background = new SolidColorBrush(Colors.Green);
-                    Knopf4.Background = new SolidColorBrush(Colors.Green);
-
-                    Knopf1.Refresh();
-                    Knopf2.Refresh();
-                    Knopf3.Refresh();
-                    Knopf4.Refresh();
-                    break;
-
-                case "Disable":
-                    Knopf1.Background = new SolidColorBrush(Colors.Gray);
-                    Knopf2.Background = new SolidColorBrush(Colors.Gray);
-                    Knopf3.Background = new SolidColorBrush(Colors.Gray);
-                    Knopf4.Background = new SolidColorBrush(Colors.Gray);
-
-                    Knopf1.IsEnabled = false;
-                    Knopf2.IsEnabled = false;
-                    Knopf3.IsEnabled = false;
-                    Knopf4.IsEnabled = false;
-
-                    Knopf1.Refresh();
-                    Knopf2.Refresh();
-                    Knopf3.Refresh();
-                    Knopf4.Refresh();
-                    break;
-
-                case "Start":
-                    Knopf1.Background = new SolidColorBrush(Colors.Yellow);
-                    Knopf2.Background = new SolidColorBrush(Colors.Yellow);
-                    Knopf3.Background = new SolidColorBrush(Colors.Yellow);
-                    Knopf4.Background = new SolidColorBrush(Colors.Yellow);
-
-                    Knopf1.Content = Text;
-                    Knopf2.Content = Text;
-                    Knopf3.Content = Text;
-                    Knopf4.Content = Text;
-
-                    Knopf1.Refresh();
-                    Knopf2.Refresh();
-                    Knopf3.Refresh();
-                    Knopf4.Refresh();
-                    break;
-
-                default:
-                    break;
-            }
-
-        }
-
-
-
-
-
     }
 }
