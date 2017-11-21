@@ -45,6 +45,7 @@ namespace TIA_Portal_V14_SP1_Starter
 
         string ProjektName = "";
         string ProjektPfad = "h:\\TiaPortal_V14";
+        List<RadioButton> RadioButtonList = new List<RadioButton>();
 
         public MainWindow()
         {
@@ -54,11 +55,29 @@ namespace TIA_Portal_V14_SP1_Starter
 
         public void ProjekteLesen()
         {
+
+
+            /*
+            * Aufbau der Projektnamen (Ordner)
+            * TwinCAT_V3_PLC_WEB_FUP_Linearachse
+            * 
+            * _PLC_ oder  _BUG_    
+            * + _NC_
+            * + _HMI
+            * + _VISU_
+            * + _FIO_
+            * + _WEB_
+            * 
+            * _AWL_ oder _AS_ oder _FUP_ oder _KOP_ oder _SCL_ oder _ST_
+            * 
+            * */
+
+
             List<string> ProjektVerzeichnis = new List<string>();
-            List<string> Projekte_PLC_NONE_NONE = new List<string>();
-            List<string> Projekte_PLC_HMI_NONE = new List<string>();
-            List<string> Projekte_PLC_NONE_FIO = new List<string>();
-            List<string> Projekte_BUG_NONE_NONE = new List<string>();
+            List<string> Projekte_PLC = new List<string>();
+            List<string> Projekte_PLC_HMI = new List<string>();
+            List<string> Projekte_PLC_FIO = new List<string>();
+            List<string> Projekte_BUG = new List<string>();
 
             System.IO.DirectoryInfo ParentDirectory = new System.IO.DirectoryInfo("Projekte");
 
@@ -70,52 +89,64 @@ namespace TIA_Portal_V14_SP1_Starter
             foreach (string Projekt in ProjektVerzeichnis)
             {
                 string Sprache = "";
-                int TextLaenge = 0;
+                int StartBezeichnung = 0;
 
-                if (Projekt.Contains("KOP")) Sprache = " (KOP)";
-                else
+                if (Projekt.Contains("FUP"))
                 {
-                    if (Projekt.Contains("FUP")) Sprache = " (FUP)";
-                    else
-                    {
-                        if (Projekt.Contains("SCL")) Sprache = " (SCL)";
-                    }
+                    Sprache = " (FUP)";
+                    StartBezeichnung = 4 + Projekt.IndexOf("FUP");
+                }
+                if (Projekt.Contains("KOP"))
+                {
+                    Sprache = " (KOP)";
+                    StartBezeichnung = 4 + Projekt.IndexOf("KOP");
+                }
+                if (Projekt.Contains("SCL"))
+                {
+                    Sprache = " (SCL)";
+                    StartBezeichnung = 4 + Projekt.IndexOf("SCL");
                 }
 
                 RadioButton rdo = new RadioButton();
                 rdo.GroupName = "TIA_PORTAL_V14_SP1";
                 rdo.VerticalAlignment = VerticalAlignment.Top;
                 rdo.Checked += new RoutedEventHandler(radioButton_Checked);
+                rdo.FontSize = 14;
 
-                if (Projekt.Contains("PLC_NONE_NONE"))
+                if (Projekt.Contains("PLC"))
                 {
-                    TextLaenge = 25;
-                    rdo.Content = Projekt.Substring(TextLaenge).Replace("_", " ") + Sprache;
-                    rdo.Name = Projekt;
-                    StackPanel_PLC_NONE_NONE.Children.Add(rdo);
+                    if (Projekt.Contains("HMI"))
+                    {
+                        rdo.Content = Projekt.Substring(StartBezeichnung).Replace("_", " ") + Sprache;
+                        rdo.Name = Projekt;
+                        StackPanel_PLC_HMI.Children.Add(rdo);
+                    }
+                    else
+                    {
+                        if (Projekt.Contains("FIO"))
+                        {
+                            rdo.Content = Projekt.Substring(StartBezeichnung).Replace("_", " ") + Sprache;
+                            rdo.Name = Projekt;
+                            StackPanel_PLC_FIO.Children.Add(rdo);
+                        }
+                        else
+                        {
+                            // nur PLC und sonst nichts
+                            rdo.Content = Projekt.Substring(StartBezeichnung).Replace("_", " ") + Sprache;
+                            rdo.Name = Projekt;
+                            StackPanel_PLC.Children.Add(rdo);
+                        }
+                    }
                 }
-                if (Projekt.Contains("PLC_HMI_NONE"))
+                else
                 {
-                    TextLaenge = 24;
-                    rdo.Content = Projekt.Substring(TextLaenge).Replace("_", " ") + Sprache;
+                    // Es gibt momentan noch keine Gruppe bei den Bugs
+                    rdo.Content = Projekt.Substring(StartBezeichnung).Replace("_", " ") + Sprache;
                     rdo.Name = Projekt;
-                    StackPanel_PLC_HMI_NONE.Children.Add(rdo);
-                }
-                if (Projekt.Contains("PLC_NONE_FIO"))
-                {
-                    TextLaenge = 24;
-                    rdo.Content = Projekt.Substring(TextLaenge).Replace("_", " ") + Sprache;
-                    rdo.Name = Projekt;
-                    StackPanel_PLC_NONE_FIO.Children.Add(rdo);
-                }
-                if (Projekt.Contains("BUG_NONE_NONE"))
-                {
-                    TextLaenge = 25;
-                    rdo.Content = Projekt.Substring(TextLaenge).Replace("_", " ") + Sprache;
-                    rdo.Name = Projekt;
-                    StackPanel_BUG_NONE_NONE.Children.Add(rdo);
+                    StackPanel_BUG.Children.Add(rdo);
                 }
 
+                RadioButtonList.Add(rdo);
             }
         }
 
@@ -125,7 +156,7 @@ namespace TIA_Portal_V14_SP1_Starter
 
             System.IO.DirectoryInfo ParentDirectory = new System.IO.DirectoryInfo("Projekte");
 
-            EigenschaftenAendern(ProjektStarten_BUG_NONE_NONE, ProjektStarten_PLC_NONE_FIO, ProjektStarten_PLC_NONE_NONE, ProjektStarten_PLC_HMI_NONE, "Enable", "-");
+            EigenschaftenAendern(ProjektStarten_BUG, ProjektStarten_PLC_FIO, ProjektStarten_PLC, ProjektStarten_PLC_HMI, "Enable", "-");
 
             ProjektName = rb.Name;
 
@@ -133,17 +164,17 @@ namespace TIA_Portal_V14_SP1_Starter
             string HtmlSeite = System.IO.File.ReadAllText(DateiName);
             string LeereHtmlSeite = "<!doctype html>   </html >";
 
-            if (rb.Name.Contains("PLC_NONE_NONE")) Web_PLC_NONE_NONE.NavigateToString(HtmlSeite);
-            else Web_PLC_NONE_NONE.NavigateToString(LeereHtmlSeite);
+            if (rb.Name.Contains("PLC")) Web_PLC.NavigateToString(HtmlSeite);
+            else Web_PLC.NavigateToString(LeereHtmlSeite);
 
-            if (rb.Name.Contains("PLC_HMI_NONE")) Web_PLC_HMI_NONE.NavigateToString(HtmlSeite);
-            else Web_PLC_HMI_NONE.NavigateToString(LeereHtmlSeite);
+            if (rb.Name.Contains("PLC_HMI")) Web_PLC_HMI.NavigateToString(HtmlSeite);
+            else Web_PLC_HMI.NavigateToString(LeereHtmlSeite);
 
-            if (rb.Name.Contains("PLC_NONE_FIO")) Web_PLC_NONE_FIO.NavigateToString(HtmlSeite);
-            else Web_PLC_NONE_FIO.NavigateToString(LeereHtmlSeite);
+            if (rb.Name.Contains("PLC_FIO")) Web_PLC_FIO.NavigateToString(HtmlSeite);
+            else Web_PLC_FIO.NavigateToString(LeereHtmlSeite);
 
-            if (rb.Name.Contains("BUG_NONE_NONE")) Web_BUG_NONE_NONE.NavigateToString(HtmlSeite);
-            else Web_BUG_NONE_NONE.NavigateToString(LeereHtmlSeite);
+            if (rb.Name.Contains("BUG")) Web_BUG.NavigateToString(HtmlSeite);
+            else Web_BUG.NavigateToString(LeereHtmlSeite);
 
 
         }
@@ -153,16 +184,16 @@ namespace TIA_Portal_V14_SP1_Starter
             System.IO.DirectoryInfo ParentDirectory = new System.IO.DirectoryInfo("Projekte");
             string sourceDirectory = ParentDirectory.FullName + "\\" + ProjektName;
 
-            EigenschaftenAendern(ProjektStarten_BUG_NONE_NONE, ProjektStarten_PLC_NONE_FIO, ProjektStarten_PLC_NONE_NONE, ProjektStarten_PLC_HMI_NONE, "Start", "Ordner " + ProjektPfad + " löschen");
+            EigenschaftenAendern(ProjektStarten_BUG, ProjektStarten_PLC_FIO, ProjektStarten_PLC, ProjektStarten_PLC_HMI, "Start", "Ordner " + ProjektPfad + " löschen");
             if (System.IO.Directory.Exists(ProjektPfad)) System.IO.Directory.Delete(ProjektPfad, true);
 
-            EigenschaftenAendern(ProjektStarten_BUG_NONE_NONE, ProjektStarten_PLC_NONE_FIO, ProjektStarten_PLC_NONE_NONE, ProjektStarten_PLC_HMI_NONE, "Start", "Ordner " + ProjektPfad + " erstellen");
+            EigenschaftenAendern(ProjektStarten_BUG, ProjektStarten_PLC_FIO, ProjektStarten_PLC, ProjektStarten_PLC_HMI, "Start", "Ordner " + ProjektPfad + " erstellen");
             System.IO.Directory.CreateDirectory(ProjektPfad);
 
-            EigenschaftenAendern(ProjektStarten_BUG_NONE_NONE, ProjektStarten_PLC_NONE_FIO, ProjektStarten_PLC_NONE_NONE, ProjektStarten_PLC_HMI_NONE, "Start", "Alle Dateien kopieren");
+            EigenschaftenAendern(ProjektStarten_BUG, ProjektStarten_PLC_FIO, ProjektStarten_PLC, ProjektStarten_PLC_HMI, "Start", "Alle Dateien kopieren");
             Copy(sourceDirectory, ProjektPfad);
 
-            EigenschaftenAendern(ProjektStarten_BUG_NONE_NONE, ProjektStarten_PLC_NONE_FIO, ProjektStarten_PLC_NONE_NONE, ProjektStarten_PLC_HMI_NONE, "Start", "Projekt starten");
+            EigenschaftenAendern(ProjektStarten_BUG, ProjektStarten_PLC_FIO, ProjektStarten_PLC, ProjektStarten_PLC_HMI, "Start", "Projekt starten");
             Process proc = new Process();
             proc.StartInfo.FileName = ProjektPfad + "\\start.cmd";
             proc.StartInfo.WorkingDirectory = ProjektPfad;
@@ -201,13 +232,13 @@ namespace TIA_Portal_V14_SP1_Starter
         private void TabControl_SelectionChanged(object sender, RoutedEventArgs e)
         {
 
-            EigenschaftenAendern(ProjektStarten_BUG_NONE_NONE, ProjektStarten_PLC_NONE_FIO, ProjektStarten_PLC_NONE_NONE, ProjektStarten_PLC_HMI_NONE, "Disable", "-");
+            EigenschaftenAendern(ProjektStarten_BUG, ProjektStarten_PLC_FIO, ProjektStarten_PLC, ProjektStarten_PLC_HMI, "Disable", "-");
 
             string LeereHtmlSeite = "<!doctype html>   </html >";
-            Web_PLC_NONE_NONE.NavigateToString(LeereHtmlSeite);
-            Web_PLC_HMI_NONE.NavigateToString(LeereHtmlSeite);
-            Web_PLC_NONE_FIO.NavigateToString(LeereHtmlSeite);
-            Web_BUG_NONE_NONE.NavigateToString(LeereHtmlSeite);
+            Web_PLC.NavigateToString(LeereHtmlSeite);
+            Web_PLC_HMI.NavigateToString(LeereHtmlSeite);
+            Web_PLC_FIO.NavigateToString(LeereHtmlSeite);
+            Web_BUG.NavigateToString(LeereHtmlSeite);
         }
 
         private void EigenschaftenAendern(Button Knopf1, Button Knopf2, Button Knopf3, Button Knopf4, String ToDo, string Text)
@@ -232,6 +263,12 @@ namespace TIA_Portal_V14_SP1_Starter
                     break;
 
                 case "Disable":
+
+                    foreach (RadioButton R_Button in RadioButtonList)
+                    {
+                        if (R_Button.IsChecked == true) R_Button.IsChecked = false;
+                    }
+
                     Knopf1.Background = new SolidColorBrush(Colors.Gray);
                     Knopf2.Background = new SolidColorBrush(Colors.Gray);
                     Knopf3.Background = new SolidColorBrush(Colors.Gray);
@@ -268,11 +305,7 @@ namespace TIA_Portal_V14_SP1_Starter
                 default:
                     break;
             }
-
         }
-
-
-
 
 
     }
