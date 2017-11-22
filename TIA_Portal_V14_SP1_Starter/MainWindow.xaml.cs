@@ -164,18 +164,25 @@ namespace TIA_Portal_V14_SP1_Starter
             string HtmlSeite = System.IO.File.ReadAllText(DateiName);
             string LeereHtmlSeite = "<!doctype html>   </html >";
 
-            if (rb.Name.Contains("PLC")) Web_PLC.NavigateToString(HtmlSeite);
-            else Web_PLC.NavigateToString(LeereHtmlSeite);
+            Web_PLC.NavigateToString(LeereHtmlSeite);
+            Web_PLC_HMI.NavigateToString(LeereHtmlSeite);
+            Web_PLC_FIO.NavigateToString(LeereHtmlSeite);
+            Web_BUG.NavigateToString(LeereHtmlSeite);
 
-            if (rb.Name.Contains("PLC_HMI")) Web_PLC_HMI.NavigateToString(HtmlSeite);
-            else Web_PLC_HMI.NavigateToString(LeereHtmlSeite);
-
-            if (rb.Name.Contains("PLC_FIO")) Web_PLC_FIO.NavigateToString(HtmlSeite);
-            else Web_PLC_FIO.NavigateToString(LeereHtmlSeite);
-
-            if (rb.Name.Contains("BUG")) Web_BUG.NavigateToString(HtmlSeite);
-            else Web_BUG.NavigateToString(LeereHtmlSeite);
-
+            if (rb.Name.Contains("PLC"))
+            {
+                if (rb.Name.Contains("HMI")) Web_PLC_HMI.NavigateToString(HtmlSeite);
+                else
+                {
+                    if (rb.Name.Contains("FIO")) Web_PLC_FIO.NavigateToString(HtmlSeite);
+                    else Web_PLC.NavigateToString(HtmlSeite);
+                }
+            }
+            else
+            {
+                // bei Bug gibts momemntan keine Unterkategorien
+                if (rb.Name.Contains("BUG")) Web_BUG.NavigateToString(HtmlSeite);
+            }
 
         }
 
