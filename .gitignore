@@ -315,3 +315,4 @@ OpenCover/
 
 # Azure Stream Analytics local run output 
 ASALocalRun/
+*.bak
