@@ -58,7 +58,7 @@ namespace TIA_Portal_V14_SP1_Starter
 
             /*
             * Aufbau der Projektnamen (Ordner)
-            * TwinCAT_V3_PLC_WEB_FUP_Linearachse
+            * V14SP1_PLC_WEB_FUP_Linearachse
             * 
             * _PLC_ oder  _BUG_    
             * + _NC_
@@ -240,7 +240,7 @@ namespace TIA_Portal_V14_SP1_Starter
 
             try
             {
-                DarstellungAendernListe(ButtonListe, true, Colors.LawnGreen, "Projekt mit TwinCAT V3 öffnen");
+                DarstellungAendernListe(ButtonListe, true, Colors.LawnGreen, "Projekt mit TIA Portal V14 öffnen");
                 Process proc = new Process();
                 proc.StartInfo.FileName = ProjektPfad + "\\start.cmd";
                 proc.StartInfo.WorkingDirectory = ProjektPfad;
