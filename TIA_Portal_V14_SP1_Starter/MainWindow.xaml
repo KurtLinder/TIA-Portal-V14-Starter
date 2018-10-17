@@ -36,8 +36,7 @@
                     <Button x:Name="ProjektStarten_BUG" Content="Projekt starten" Height="30" Margin="300,10,10,0" IsEnabled="False" Click="ProjektStarten" FontSize="16" MinWidth="400" MinHeight="30"   HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
-
         </TabControl>
-
+        <Label Content="V1.1" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Width="35"/>
     </Grid>
 </Window>
