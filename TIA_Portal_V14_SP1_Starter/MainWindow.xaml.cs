@@ -41,7 +41,7 @@ namespace TIA_Portal_V14_SP1_Starter
 
     public partial class MainWindow : Window
     {
-
+        bool AnzeigeAktualisieren = false;
         string ProjektName = "";
         string ProjektPfad = "h:\\TiaPortal_V14";
         List<RadioButton> RadioButtonList = new List<RadioButton>();
@@ -313,6 +313,22 @@ namespace TIA_Portal_V14_SP1_Starter
                 if (R_Button.IsChecked == true) R_Button.IsChecked = false;
             }
         }
+
+        private void Klick_CheckBox_KOP(object sender, RoutedEventArgs e)
+        {
+            if (AnzeigeAktualisieren) ProjekteLesen();
+        }
+
+        private void Klick_CheckBox_FUP(object sender, RoutedEventArgs e)
+        {
+            if (AnzeigeAktualisieren) ProjekteLesen();
+        }
+
+        private void Klick_CheckBox_SCL(object sender, RoutedEventArgs e)
+        {
+            if (AnzeigeAktualisieren) ProjekteLesen();
+        }
+        
 
     }
 }
