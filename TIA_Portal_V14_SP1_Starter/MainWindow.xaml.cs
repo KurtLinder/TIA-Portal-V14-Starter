@@ -41,7 +41,7 @@ namespace TIA_Portal_V14_SP1_Starter
 
     public partial class MainWindow : Window
     {
-
+        bool AnzeigeAktualisieren = false;
         string ProjektName = "";
         string ProjektPfad = "h:\\TiaPortal_V14";
         List<RadioButton> RadioButtonList = new List<RadioButton>();
@@ -71,6 +71,12 @@ namespace TIA_Portal_V14_SP1_Starter
             * 
             * */
 
+            // Zuerst die Listen löschen
+            StackPanel_BUG.Children.Clear();
+            StackPanel_PLC.Children.Clear();
+            StackPanel_PLC_FIO.Children.Clear();
+            StackPanel_PLC_HMI.Children.Clear();
+            //
             ButtonListe.Add(ProjektStarten_BUG);
             ButtonListe.Add(ProjektStarten_PLC);
             ButtonListe.Add(ProjektStarten_PLC_FIO);
@@ -89,43 +95,58 @@ namespace TIA_Portal_V14_SP1_Starter
                 string OrdnerName = d.Name;
                 string Sprache = "";
                 int StartBezeichnung = 0;
+                bool Anzeigen = false;
 
                 if (OrdnerName.Contains("FUP"))
                 {
+                    if (Checkbox_FUP.IsChecked.Value)
+                    {
+                        Anzeigen = true;
+                    }
                     Sprache = "FUP";
                     StartBezeichnung = 4 + OrdnerName.IndexOf("FUP");
                 }
                 if (OrdnerName.Contains("KOP"))
                 {
+                    if (Checkbox_KOP.IsChecked.Value)
+                    {
+                        Anzeigen = true;
+                    }
                     Sprache = "KOP";
                     StartBezeichnung = 4 + OrdnerName.IndexOf("KOP");
                 }
                 if (OrdnerName.Contains("SCL"))
                 {
+                    if (Checkbox_SCL.IsChecked.Value)
+                    {
+                        Anzeigen = true;
+                    }
                     Sprache = "SCL";
                     StartBezeichnung = 4 + OrdnerName.IndexOf("SCL");
                 }
 
-
-                if (d.Name.Contains("PLC"))
+                if (Anzeigen)
                 {
-                    if (d.Name.Contains("HMI"))
+                    if (d.Name.Contains("PLC"))
                     {
-                        Tuple<string, string, string> TplEintrag = new Tuple<string, string, string>(OrdnerName.Substring(StartBezeichnung), Sprache, OrdnerName);
-                        TupleList_PLC_HMI.Add(TplEintrag);
-                    }
-                    else
-                    {
-                        if (d.Name.Contains("FIO"))
+                        if (d.Name.Contains("HMI"))
                         {
                             Tuple<string, string, string> TplEintrag = new Tuple<string, string, string>(OrdnerName.Substring(StartBezeichnung), Sprache, OrdnerName);
-                            TupleList_PLC_FIO.Add(TplEintrag);
+                            TupleList_PLC_HMI.Add(TplEintrag);
                         }
                         else
                         {
-                            // nur PLC und sonst nichts
-                            Tuple<string, string, string> TplEintrag = new Tuple<string, string, string>(OrdnerName.Substring(StartBezeichnung), Sprache, OrdnerName);
-                            TupleList_PLC.Add(TplEintrag);
+                            if (d.Name.Contains("FIO"))
+                            {
+                                Tuple<string, string, string> TplEintrag = new Tuple<string, string, string>(OrdnerName.Substring(StartBezeichnung), Sprache, OrdnerName);
+                                TupleList_PLC_FIO.Add(TplEintrag);
+                            }
+                            else
+                            {
+                                // nur PLC und sonst nichts
+                                Tuple<string, string, string> TplEintrag = new Tuple<string, string, string>(OrdnerName.Substring(StartBezeichnung), Sprache, OrdnerName);
+                                TupleList_PLC.Add(TplEintrag);
+                            }
                         }
                     }
                 }
@@ -147,6 +168,8 @@ namespace TIA_Portal_V14_SP1_Starter
             TabMitInhaltFuellen(TupleList_PLC_FIO, StackPanel_PLC_FIO);
             TabMitInhaltFuellen(TupleList_PLC_HMI, StackPanel_PLC_HMI);
             TabMitInhaltFuellen(TupleList_BUG, StackPanel_BUG);
+
+            AnzeigeAktualisieren = true;
         }
 
         private void TabMitInhaltFuellen(List<Tuple<string, string, string>> Projekte, System.Windows.Controls.StackPanel StackPanel)
@@ -313,6 +336,22 @@ namespace TIA_Portal_V14_SP1_Starter
                 if (R_Button.IsChecked == true) R_Button.IsChecked = false;
             }
         }
+
+        private void Klick_CheckBox_KOP(object sender, RoutedEventArgs e)
+        {
+            if (AnzeigeAktualisieren) ProjekteLesen();
+        }
+
+        private void Klick_CheckBox_FUP(object sender, RoutedEventArgs e)
+        {
+            if (AnzeigeAktualisieren) ProjekteLesen();
+        }
+
+        private void Klick_CheckBox_SCL(object sender, RoutedEventArgs e)
+        {
+            if (AnzeigeAktualisieren) ProjekteLesen();
+        }
+
 
     }
 }
