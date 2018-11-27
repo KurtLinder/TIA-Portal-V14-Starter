@@ -198,9 +198,18 @@ namespace TIA_Portal_V14_SP1_Starter
             DarstellungAendernListe(ButtonListe, true, Colors.Green, "Projekt starten");
             ProjektName = rb.Name;
 
-            string DateiName = ParentDirectory.FullName + "\\" + rb.Name + "\\index.html";
-            string HtmlSeite = System.IO.File.ReadAllText(DateiName);
             string LeereHtmlSeite = "<!doctype html>   </html >";
+            string HtmlSeite = "";
+
+            string DateiName = ParentDirectory.FullName + "\\" + rb.Name + "\\index.html";
+            if (File.Exists(DateiName))
+            {
+                HtmlSeite = System.IO.File.ReadAllText(DateiName);
+            }
+            else
+            {
+                HtmlSeite = "<!doctype html>   </html >";
+            }
 
             Web_PLC.NavigateToString(LeereHtmlSeite);
             Web_PLC_FIO.NavigateToString(LeereHtmlSeite);

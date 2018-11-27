@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="TIA Portal V14 SP1 Starter" Width="1200" Height="800">
     <Grid Margin="5,5,5,5">
-        <Label Content="V1.2" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Width="35" Margin="0,0,15,0"/>
+        <Label Content="V1.3" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Width="35" Margin="0,0,15,0"/>
         <CheckBox x:Name="Checkbox_KOP" Content="KOP" HorizontalAlignment="Left" Height="15" Margin="70,10,0,0" VerticalAlignment="Top" Width="50" IsChecked="True" Unchecked="Klick_CheckBox_KOP" Checked="Klick_CheckBox_KOP"/>
         <CheckBox x:Name="Checkbox_FUP" Content="FUP" HorizontalAlignment="Left" Height="15" Margin="10,10,0,0" VerticalAlignment="Top" Width="50" IsChecked="True" Unchecked="Klick_CheckBox_FUP" Checked="Klick_CheckBox_FUP"/>
         <CheckBox x:Name="Checkbox_SCL" Content="SCL" HorizontalAlignment="Left" Height="15" Margin="120,10,0,0" VerticalAlignment="Top" Width="50" IsChecked="True" Unchecked="Klick_CheckBox_SCL" Checked="Klick_CheckBox_SCL"/>
