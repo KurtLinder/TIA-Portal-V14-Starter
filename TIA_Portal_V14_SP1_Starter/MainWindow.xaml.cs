@@ -61,11 +61,12 @@ namespace TIA_Portal_V14_SP1_Starter
             * V14SP1_PLC_WEB_FUP_Linearachse
             * 
             * _PLC_ oder  _BUG_    
-            * + _NC_
-            * + _HMI
-            * + _VISU_
-            * + _FIO_
-            * + _WEB_
+            * + _NC_    .. Servo
+            * + _HMI    .. HMI (Touch)
+            * + _VISU_  .. Visualisierung
+            * + _FIO_   .. Factory I/O
+            * + _WEB_   .. Internet
+            * + _DT_    .. digital Twin
             * 
             * _AWL_ oder _AS_ oder _FUP_ oder _KOP_ oder _SCL_ oder _ST_
             * 
@@ -76,16 +77,19 @@ namespace TIA_Portal_V14_SP1_Starter
             StackPanel_PLC.Children.Clear();
             StackPanel_PLC_FIO.Children.Clear();
             StackPanel_PLC_HMI.Children.Clear();
+            StackPanel_DigitalTwin.Children.Clear();
             //
             ButtonListe.Add(ProjektStarten_BUG);
             ButtonListe.Add(ProjektStarten_PLC);
             ButtonListe.Add(ProjektStarten_PLC_FIO);
             ButtonListe.Add(ProjektStarten_PLC_HMI);
+            ButtonListe.Add(ProjektStarten_DigitalTwin);
 
             // Name Komplett, kurz, Sprache, Anfang
             List<Tuple<string, string, string>> TupleList_PLC = new List<Tuple<string, string, string>>();
             List<Tuple<string, string, string>> TupleList_PLC_FIO = new List<Tuple<string, string, string>>();
             List<Tuple<string, string, string>> TupleList_PLC_HMI = new List<Tuple<string, string, string>>();
+            List<Tuple<string, string, string>> TupleList_DigitalTwin = new List<Tuple<string, string, string>>();
             List<Tuple<string, string, string>> TupleList_BUG = new List<Tuple<string, string, string>>();
 
             System.IO.DirectoryInfo ParentDirectory = new System.IO.DirectoryInfo("Projekte");
@@ -129,23 +133,31 @@ namespace TIA_Portal_V14_SP1_Starter
                 {
                     if (d.Name.Contains("PLC"))
                     {
-                        if (d.Name.Contains("HMI"))
+                        if (d.Name.Contains("DT"))
                         {
                             Tuple<string, string, string> TplEintrag = new Tuple<string, string, string>(OrdnerName.Substring(StartBezeichnung), Sprache, OrdnerName);
-                            TupleList_PLC_HMI.Add(TplEintrag);
+                            TupleList_DigitalTwin.Add(TplEintrag);
                         }
                         else
                         {
-                            if (d.Name.Contains("FIO"))
+                            if (d.Name.Contains("HMI"))
                             {
                                 Tuple<string, string, string> TplEintrag = new Tuple<string, string, string>(OrdnerName.Substring(StartBezeichnung), Sprache, OrdnerName);
-                                TupleList_PLC_FIO.Add(TplEintrag);
+                                TupleList_PLC_HMI.Add(TplEintrag);
                             }
                             else
                             {
-                                // nur PLC und sonst nichts
-                                Tuple<string, string, string> TplEintrag = new Tuple<string, string, string>(OrdnerName.Substring(StartBezeichnung), Sprache, OrdnerName);
-                                TupleList_PLC.Add(TplEintrag);
+                                if (d.Name.Contains("FIO"))
+                                {
+                                    Tuple<string, string, string> TplEintrag = new Tuple<string, string, string>(OrdnerName.Substring(StartBezeichnung), Sprache, OrdnerName);
+                                    TupleList_PLC_FIO.Add(TplEintrag);
+                                }
+                                else
+                                {
+                                    // nur PLC und sonst nichts
+                                    Tuple<string, string, string> TplEintrag = new Tuple<string, string, string>(OrdnerName.Substring(StartBezeichnung), Sprache, OrdnerName);
+                                    TupleList_PLC.Add(TplEintrag);
+                                }
                             }
                         }
                     }
@@ -162,11 +174,13 @@ namespace TIA_Portal_V14_SP1_Starter
             TupleList_PLC.Sort();
             TupleList_PLC_FIO.Sort();
             TupleList_PLC_HMI.Sort();
+            TupleList_DigitalTwin.Sort();
             TupleList_BUG.Sort();
 
             TabMitInhaltFuellen(TupleList_PLC, StackPanel_PLC);
             TabMitInhaltFuellen(TupleList_PLC_FIO, StackPanel_PLC_FIO);
             TabMitInhaltFuellen(TupleList_PLC_HMI, StackPanel_PLC_HMI);
+            TabMitInhaltFuellen(TupleList_DigitalTwin, StackPanel_DigitalTwin);
             TabMitInhaltFuellen(TupleList_BUG, StackPanel_BUG);
 
             AnzeigeAktualisieren = true;
@@ -214,16 +228,26 @@ namespace TIA_Portal_V14_SP1_Starter
             Web_PLC.NavigateToString(LeereHtmlSeite);
             Web_PLC_FIO.NavigateToString(LeereHtmlSeite);
             Web_PLC_HMI.NavigateToString(LeereHtmlSeite);
+            Web_DigitalTwin.NavigateToString(LeereHtmlSeite);
             Web_BUG.NavigateToString(LeereHtmlSeite);
 
             if (rb.Name.Contains("PLC"))
             {
-                if (rb.Name.Contains("HMI"))
-                    Web_PLC_HMI.NavigateToString(HtmlSeite);
+                if (rb.Name.Contains("DT"))
+                    Web_DigitalTwin.NavigateToString(HtmlSeite);
                 else
                 {
-                    if (rb.Name.Contains("FIO")) Web_PLC_FIO.NavigateToString(HtmlSeite);
-                    else Web_PLC.NavigateToString(HtmlSeite);
+                    if (rb.Name.Contains("HMI"))
+                        Web_PLC_HMI.NavigateToString(HtmlSeite);
+                    else
+                    {
+                        if (rb.Name.Contains("FIO"))
+                            Web_PLC_FIO.NavigateToString(HtmlSeite);
+                        else
+                        {
+                            Web_PLC.NavigateToString(HtmlSeite);
+                        }
+                    }
                 }
             }
             else
@@ -322,6 +346,7 @@ namespace TIA_Portal_V14_SP1_Starter
             Web_PLC.NavigateToString(LeereHtmlSeite);
             Web_PLC_FIO.NavigateToString(LeereHtmlSeite);
             Web_PLC_HMI.NavigateToString(LeereHtmlSeite);
+            Web_DigitalTwin.NavigateToString(LeereHtmlSeite);
             Web_BUG.NavigateToString(LeereHtmlSeite);
         }
 

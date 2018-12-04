@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="TIA Portal V14 SP1 Starter" Width="1200" Height="800">
     <Grid Margin="5,5,5,5">
-        <Label Content="V1.3" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Width="35" Margin="0,0,15,0"/>
+        <Label Content="V1.4" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Width="35" Margin="0,0,15,0"/>
         <CheckBox x:Name="Checkbox_KOP" Content="KOP" HorizontalAlignment="Left" Height="15" Margin="70,10,0,0" VerticalAlignment="Top" Width="50" IsChecked="True" Unchecked="Klick_CheckBox_KOP" Checked="Klick_CheckBox_KOP"/>
         <CheckBox x:Name="Checkbox_FUP" Content="FUP" HorizontalAlignment="Left" Height="15" Margin="10,10,0,0" VerticalAlignment="Top" Width="50" IsChecked="True" Unchecked="Klick_CheckBox_FUP" Checked="Klick_CheckBox_FUP"/>
         <CheckBox x:Name="Checkbox_SCL" Content="SCL" HorizontalAlignment="Left" Height="15" Margin="120,10,0,0" VerticalAlignment="Top" Width="50" IsChecked="True" Unchecked="Klick_CheckBox_SCL" Checked="Klick_CheckBox_SCL"/>
@@ -31,6 +31,13 @@
                     <StackPanel x:Name="StackPanel_PLC_FIO" Margin="10,10,10,10" Width="400" HorizontalAlignment="Left" MinHeight="200"/>
                     <WebBrowser x:Name="Web_PLC_FIO" Margin="300,50,10,10" MinWidth="200" MinHeight="200"/>
                     <Button x:Name="ProjektStarten_PLC_FIO" Content="Projekt starten" Height="30" Margin="300,10,10,0" IsEnabled="False" Click="ProjektStarten" FontSize="16" MinWidth="400" MinHeight="30" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Top"/>
+                </Grid>
+            </TabItem>            
+            <TabItem  Header="Digital Twin" FontSize="14">
+                <Grid x:Name="Tab_DigitalTwin" Background="#FFE5E5E5">
+                    <StackPanel x:Name="StackPanel_DigitalTwin" Margin="10,10,10,10" Width="400" HorizontalAlignment="Left" MinHeight="200"/>
+                    <WebBrowser x:Name="Web_DigitalTwin" Margin="300,50,10,10" MinWidth="200" MinHeight="200"/>
+                    <Button x:Name="ProjektStarten_DigitalTwin" Content="Projekt starten" Height="30" Margin="300,10,10,0" IsEnabled="False" Click="ProjektStarten" FontSize="16" MinWidth="400" MinHeight="30" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <TabItem  Header="Bugs" FontSize="14">
